@@ -16,10 +16,6 @@ if [[ $- == *i* ]]; then
     alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
     alias deskon="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-    # Simplify editing .zlogin
-    alias ebp='code $HOME/.zshrc $HOME/.zlogin $HOME/.aliases.zsh'
-    alias sbp='source $HOME/.zshrc $HOME/.zlogin $HOME/.aliases.zsh'
-
     # Shortcuts
     alias s='cd ~/Sites/'
     alias d='cd ~/Desktop/'
