@@ -27,6 +27,7 @@ if [[ $- == *i* ]]; then
     alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
     alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
     alias fixsound="sudo killall coreaudiod" # Fix sound
+    alias gal="gallery-dl --filesize-min 500K --filesize-max 200M"
 
     # Git
     alias gs="git status"
