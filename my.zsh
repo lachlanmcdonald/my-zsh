@@ -44,6 +44,11 @@ if [[ $- == *i* ]]; then
         find . -name '*' -size 0 -delete
     }
 
+    # Unlock all files
+    function unlock() {
+        find . -flags uchg -exec chflags nouchg {} \;
+    }
+
     # Prune empty directories
     function empty() {
         find . -type d -empty -delete
