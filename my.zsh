@@ -70,6 +70,12 @@ if [[ $- == *i* ]]; then
         plutil -convert json -r -o - "$1"
     }
 
+    # Convert an image into a favicon
+    function favicon() {
+        bname=$(basename "$1")
+        magick "$1" -background none -resize 128x128 -density 128x128 "$bname.ico"
+    }
+
     # Recompress images using MozJPEG
     function mozjpeg() {
         for f in *.jpg; do
