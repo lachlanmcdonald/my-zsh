@@ -8,6 +8,8 @@ export EDITOR='code'
 if [[ $- == *i* ]]; then
     CLICOLOR=1
 
+    alias drop="cd /Volumes/Drop"
+
     # Hide/show dot files
     alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
     alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
@@ -74,6 +76,22 @@ if [[ $- == *i* ]]; then
     function favicon() {
         bname=$(basename "$1")
         magick "$1" -background none -resize 128x128 -density 128x128 "$bname.ico"
+    }
+
+    # Remove restrictions from a PDF when the password is known
+    # but not the "permissions password"
+    function depdf() {
+        BNAME=$(basename "$1")
+        $(brew --prefix gs)/bin/gs \
+            -dSAFER \
+            -dBATCH \
+            -dNOPAUSE \
+            -sDEVICE=pdfwrite \
+            -sPDFPassword="$2" \
+            -dPDFSettings=/prepress \
+            -dPassThroughJPEGImages=true \
+            -sOutputFile="${BNAME%.*}.unrestricted.pdf"
+            "$1"
     }
 
     # Recompress images using MozJPEG
