@@ -29,7 +29,6 @@ if [[ $- == *i* ]]; then
     alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
     alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
     alias fixsound="sudo killall coreaudiod" # Fix sound
-    alias gal="gallery-dl --filesize-min 500K --filesize-max 200M"
 
     # Git
     alias gs="git status"
@@ -68,50 +67,50 @@ if [[ $- == *i* ]]; then
     }
 
     # Output a plist file as JSON
-    function pj() {
-        plutil -convert json -r -o - "$1"
-    }
+    # function pj() {
+    #     plutil -convert json -r -o - "$1"
+    # }
 
     # Convert an image into a favicon
-    function favicon() {
-        bname=$(basename "$1")
-        magick "$1" -background none -resize 128x128 -density 128x128 "$bname.ico"
-    }
+    # function favicon() {
+    #     bname=$(basename "$1")
+    #     magick "$1" -background none -resize 128x128 -density 128x128 "$bname.ico"
+    # }
 
     # Remove restrictions from a PDF when the password is known
     # but not the "permissions password"
-    function depdf() {
-        BNAME=$(basename "$1")
-        $(brew --prefix gs)/bin/gs \
-            -dSAFER \
-            -dBATCH \
-            -dNOPAUSE \
-            -sDEVICE=pdfwrite \
-            -sPDFPassword="$2" \
-            -dPDFSettings=/prepress \
-            -dPassThroughJPEGImages=true \
-            -sOutputFile="${BNAME%.*}.unrestricted.pdf"
-            "$1"
-    }
+    # function depdf() {
+    #     BNAME=$(basename "$1")
+    #     $(brew --prefix gs)/bin/gs \
+    #         -dSAFER \
+    #         -dBATCH \
+    #         -dNOPAUSE \
+    #         -sDEVICE=pdfwrite \
+    #         -sPDFPassword="$2" \
+    #         -dPDFSettings=/prepress \
+    #         -dPassThroughJPEGImages=true \
+    #         -sOutputFile="${BNAME%.*}.unrestricted.pdf"
+    #         "$1"
+    # }
 
     # Recompress images using MozJPEG
-    function mozjpeg() {
-        for f in *.jpg; do
-            if [ -e $f ]; then
-                fs1=`stat -f"%z" "$f"`
-                /usr/local/opt/mozjpeg/bin/jpegtran -outfile "$f" -optimise -copy none "$f"
+    # function mozjpeg() {
+    #     for f in *.jpg; do
+    #         if [ -e $f ]; then
+    #             fs1=`stat -f"%z" "$f"`
+    #             /usr/local/opt/mozjpeg/bin/jpegtran -outfile "$f" -optimise -copy none "$f"
 
-                if [ $? -eq 0 ]; then
-                    fs2=`stat -f%z "$f"`
-                    change=`bc -l <<< "$fs2 / $fs1 * 100"`
-                    change=`bc -l <<< "scale=2; $change/1"`
-                    echo "$f   $change"
-                else
-                    echo "Could not process: $f" >&2
-                fi
-            fi
-        done
-    }
+    #             if [ $? -eq 0 ]; then
+    #                 fs2=`stat -f%z "$f"`
+    #                 change=`bc -l <<< "$fs2 / $fs1 * 100"`
+    #                 change=`bc -l <<< "scale=2; $change/1"`
+    #                 echo "$f   $change"
+    #             else
+    #                 echo "Could not process: $f" >&2
+    #             fi
+    #         fi
+    #     done
+    # }
 
     # Fix fonts
     function fixfonts() {
@@ -120,8 +119,8 @@ if [[ $- == *i* ]]; then
     }
 
     # GIF to MP4; brew install ffmpeg
-    function gifmov() {
-        bname=$(basename "$1")
-        ffmpeg -i "$1" -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" "${bname%.*}.mp4"
-    }
+    # function gifmov() {
+    #     bname=$(basename "$1")
+    #     ffmpeg -i "$1" -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" "${bname%.*}.mp4"
+    # }
 fi
