@@ -94,6 +94,30 @@ if [[ $- == *i* ]]; then
             "$1"
     }
 
+    # Convert anything to a GIF
+     function m2gif() {
+        MIME=$(file --no-buffer --no-pad --mime --brief "$1")
+        
+        if [[ $MIME == "image/webp"* ]]; then
+            BNAME=$(basename "$1")
+            TEMP=$(mktemp -d)
+            magick convert "$1" -coalesce +adjoin "$TEMP/frame%04d.png"
+            ffmpeg \
+                -y \
+                -hide_banner \
+                -start_number 0 -framerate ${2:-24} -i "$TEMP/frame%04d.png" \
+                -filter_complex "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse" \
+                "${BNAME%.*}.gif"
+        else
+            BNAME=$(basename "$1")
+            ffmpeg -y \
+                -hide_banner \
+                -i "$1" \
+                -filter_complex "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse" \
+                "${BNAME%.*}.gif"
+        fi
+    }
+
     # Recompress images using MozJPEG
     # function mozjpeg() {
     #     for f in *.jpg; do
