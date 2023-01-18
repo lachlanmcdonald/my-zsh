@@ -11,8 +11,8 @@ if [[ $- == *i* ]]; then
     alias drop="cd /Volumes/Drop"
 
     # Hide/show dot files
-    alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
-    alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
+    # alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
+    # alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
 
     # Hide\show desktop icons
     alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
@@ -25,10 +25,10 @@ if [[ $- == *i* ]]; then
 
     alias mkdir='mkdir -p' # mkdir always creates sub-directories
     alias ls='ls -lAG' # Pretty ls
-    alias p='http-server -p 3000 -o -d -i --cors' # Simple HTTP server
+    alias p='http-server -p 4567 -o -d -i --cors' # Simple HTTP server
     alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
     alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
-    alias fixsound="sudo killall coreaudiod" # Fix sound
+    # alias fixsound="sudo killall coreaudiod" # Fix sound
 
     # Git
     alias gs="git status"
@@ -42,29 +42,30 @@ if [[ $- == *i* ]]; then
 
     # Delete files that are zero bytes
     function delzb() {
-        find . -name '*' -size 0 -delete
+        find . -type f -name '*' -size 0 -delete
+        find . -type d -empty -delete
     }
-
+    
     # Unlock all files
     function unlock() {
         find . -flags uchg -exec chflags nouchg {} \;
     }
 
     # Prune empty directories
-    function empty() {
-        find . -type d -empty -delete
-    }
+    # function empty() {
+    #     find . -type d -empty -delete
+    # }
 
     # Poster a video
-    function poster() {
-        bname=$(basename "$1")
-        ffmpeg -i "$1" -vframes 1 -f image2 "${bname%.*}.jpg"
-    }
+    # function poster() {
+    #     bname=$(basename "$1")
+    #     ffmpeg -i "$1" -vframes 1 -f image2 "${bname%.*}.jpg"
+    # }
 
     # Trim an image
-    function itrim() {
-        convert "$1" -trim +repage "$1"
-    }
+    # function itrim() {
+    #     convert "$1" -trim +repage "$1"
+    # }
 
     # Output a plist file as JSON
     # function pj() {
@@ -79,19 +80,19 @@ if [[ $- == *i* ]]; then
 
     # Remove restrictions from a PDF when the password is known
     # but not the "permissions password"
-    # function depdf() {
-    #     BNAME=$(basename "$1")
-    #     $(brew --prefix gs)/bin/gs \
-    #         -dSAFER \
-    #         -dBATCH \
-    #         -dNOPAUSE \
-    #         -sDEVICE=pdfwrite \
-    #         -sPDFPassword="$2" \
-    #         -dPDFSettings=/prepress \
-    #         -dPassThroughJPEGImages=true \
-    #         -sOutputFile="${BNAME%.*}.unrestricted.pdf"
-    #         "$1"
-    # }
+    function depdf() {
+        BNAME=$(basename "$1")
+        $(brew --prefix gs)/bin/gs \
+            -dSAFER \
+            -dBATCH \
+            -dNOPAUSE \
+            -sDEVICE=pdfwrite \
+            -sPDFPassword="$2" \
+            -dPDFSettings=/prepress \
+            -dPassThroughJPEGImages=true \
+            -sOutputFile="${BNAME%.*}.unrestricted.pdf"
+            "$1"
+    }
 
     # Recompress images using MozJPEG
     # function mozjpeg() {
@@ -113,10 +114,10 @@ if [[ $- == *i* ]]; then
     # }
 
     # Fix fonts
-    function fixfonts() {
-        sudo atsutil server -shutdown
-        sudo atsutil databases -remove
-    }
+    # function fixfonts() {
+    #     sudo atsutil server -shutdown
+    #     sudo atsutil databases -remove
+    # }
 
     # GIF to MP4; brew install ffmpeg
     # function gifmov() {
