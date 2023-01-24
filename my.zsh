@@ -11,8 +11,8 @@ if [[ $- == *i* ]]; then
     alias drop="cd /Volumes/Drop"
 
     # Hide/show dot files
-    # alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
-    # alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
+    alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
+    alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
 
     # Hide\show desktop icons
     alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
