@@ -8,6 +8,8 @@ export EDITOR='code'
 if [[ $- == *i* ]]; then
     CLICOLOR=1
 
+    alias pn="pnpm"
+
     alias drop="cd /Volumes/Drop"
 
     # Hide/show dot files
