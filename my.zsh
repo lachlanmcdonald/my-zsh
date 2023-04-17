@@ -6,148 +6,50 @@ export EDITOR='code'
 
 # Only process these commands when running an interactive shell
 if [[ $- == *i* ]]; then
-    CLICOLOR=1
+	CLICOLOR=1
 
-    alias pn="pnpm"
+	# pnpm
+	alias pn="pnpm"
 
-    alias drop="cd /Volumes/Drop"
+	# Hide/show dot files
+	alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
+	alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
 
-    # Hide/show dot files
-    alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
-    alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
+	# Hide\show desktop icons
+	alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+	alias deskon="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-    # Hide\show desktop icons
-    alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-    alias deskon="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+	# Shortcuts
+	alias s='cd ~/Sites/'
+	alias d='cd ~/Desktop/'
+	alias dw='cd ~/Downloads/'
+	alias drop="cd /Volumes/Drop"
 
-    # Shortcuts
-    alias s='cd ~/Sites/'
-    alias d='cd ~/Desktop/'
-    alias dw='cd ~/Downloads/'
+	alias mkdir='mkdir -p' # mkdir always creates sub-directories
+	alias ls='ls -lAG' # Pretty ls
+	alias p='http-server -p 4567 -o -d -i --cors' # Simple HTTP server
+	alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
+	alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
 
-    alias mkdir='mkdir -p' # mkdir always creates sub-directories
-    alias ls='ls -lAG' # Pretty ls
-    alias p='http-server -p 4567 -o -d -i --cors' # Simple HTTP server
-    alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
-    alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
-    # alias fixsound="sudo killall coreaudiod" # Fix sound
+	# Git
+	alias gs="git status"
+	alias gf="git fetch --progress --tags --prune --prune-tags; git pull --progress"
+	alias wip="git commit -m WIP"
 
-    # Git
-    alias gs="git status"
-    alias gf="git fetch --progress --tags --prune --prune-tags; git pull --progress"
-    alias wip="git commit -m WIP"
+	# Find files\directories with names that contain the provided string
+	function fz() {
+		find -E . -iregex ".*$1.*"
+	}
 
-    # Find files\directories with names that contain the provided string
-    function fz() {
-        find -E . -iregex ".*$1.*"
-    }
-
-    # Delete files that are zero bytes
-    function delzb() {
-        find . -type f -name '*' -size 0 -delete
-        find . -type d -empty -delete
-    }
-    
-    # Unlock all files
-    function unlock() {
-        find . -flags uchg -exec chflags nouchg {} \;
-    }
-
-    # Prune empty directories
-    # function empty() {
-    #     find . -type d -empty -delete
-    # }
-
-    # Poster a video
-    # function poster() {
-    #     bname=$(basename "$1")
-    #     ffmpeg -i "$1" -vframes 1 -f image2 "${bname%.*}.jpg"
-    # }
-
-    # Trim an image
-    # function itrim() {
-    #     convert "$1" -trim +repage "$1"
-    # }
-
-    # Output a plist file as JSON
-    # function pj() {
-    #     plutil -convert json -r -o - "$1"
-    # }
-
-    # Convert an image into a favicon
-    # function favicon() {
-    #     bname=$(basename "$1")
-    #     magick "$1" -background none -resize 128x128 -density 128x128 "$bname.ico"
-    # }
-
-    # Remove restrictions from a PDF when the password is known
-    # but not the "permissions password"
-    function depdf() {
-        BNAME=$(basename "$1")
-        $(brew --prefix gs)/bin/gs \
-            -dSAFER \
-            -dBATCH \
-            -dNOPAUSE \
-            -sDEVICE=pdfwrite \
-            -sPDFPassword="$2" \
-            -dPDFSettings=/prepress \
-            -dPassThroughJPEGImages=true \
-            -sOutputFile="${BNAME%.*}.unrestricted.pdf"
-            "$1"
-    }
-
-    # Convert anything to a GIF
-     function m2gif() {
-        MIME=$(file --no-buffer --no-pad --mime --brief "$1")
-        
-        if [[ $MIME == "image/webp"* ]]; then
-            BNAME=$(basename "$1")
-            TEMP=$(mktemp -d)
-            magick convert "$1" -coalesce +adjoin "$TEMP/frame%04d.png"
-            ffmpeg \
-                -y \
-                -hide_banner \
-                -start_number 0 -framerate ${2:-24} -i "$TEMP/frame%04d.png" \
-                -filter_complex "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse" \
-                "${BNAME%.*}.gif"
-        else
-            BNAME=$(basename "$1")
-            ffmpeg -y \
-                -hide_banner \
-                -i "$1" \
-                -filter_complex "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse" \
-                "${BNAME%.*}.gif"
-        fi
-    }
-
-    # Recompress images using MozJPEG
-    # function mozjpeg() {
-    #     for f in *.jpg; do
-    #         if [ -e $f ]; then
-    #             fs1=`stat -f"%z" "$f"`
-    #             /usr/local/opt/mozjpeg/bin/jpegtran -outfile "$f" -optimise -copy none "$f"
-
-    #             if [ $? -eq 0 ]; then
-    #                 fs2=`stat -f%z "$f"`
-    #                 change=`bc -l <<< "$fs2 / $fs1 * 100"`
-    #                 change=`bc -l <<< "scale=2; $change/1"`
-    #                 echo "$f   $change"
-    #             else
-    #                 echo "Could not process: $f" >&2
-    #             fi
-    #         fi
-    #     done
-    # }
-
-    # Fix fonts
-    # function fixfonts() {
-    #     sudo atsutil server -shutdown
-    #     sudo atsutil databases -remove
-    # }
-
-    # GIF to MP4; brew install ffmpeg
-    # function gifmov() {
-    #     bname=$(basename "$1")
-    #     ffmpeg -i "$1" -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" "${bname%.*}.mp4"
-    # }
+	# Delete files that are zero bytes
+	# and prune empty directories
+	function delzb() {
+		find . -type f -name '*' -size 0 -delete
+		find . -type d -empty -delete
+	}
+	
+	# Unlock all files
+	function unlock() {
+		find . -flags uchg -exec chflags nouchg {} \;
+	}
 fi
