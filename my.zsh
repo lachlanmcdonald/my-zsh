@@ -52,4 +52,9 @@ if [[ $- == *i* ]]; then
 	function unlock() {
 		find . -flags uchg -exec chflags nouchg {} \;
 	}
+
+	# Fix audio
+	function fixaudio() {
+		sudo kill -9 `ps ax | grep 'coreaudio[a-z]' | awk '{print $1}'`
+	}
 fi
