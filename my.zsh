@@ -27,7 +27,6 @@ if [[ $- == *i* ]]; then
 
 	alias mkdir='mkdir -p' # mkdir always creates sub-directories
 	alias ls='ls -lAG' # Pretty ls
-	alias p='http-server -p 4567 -o -d -i --cors' # Simple HTTP server
 	alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
 	alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
 
@@ -56,5 +55,18 @@ if [[ $- == *i* ]]; then
 	# Fix audio
 	function fixaudio() {
 		sudo kill -9 `ps ax | grep 'coreaudio[a-z]' | awk '{print $1}'`
+	}
+
+	# determine local package manager and run command with it
+	function p() {
+		if [[ -f 'pnpm-lock.yaml' ]]; then
+			command pnpm "$@"
+		elif [[ -f 'yarn.lock' ]]; then
+			command yarn "$@"
+		elif [[ -f 'package-lock.json' ]]; then
+			command npm "$@"
+		else
+			command pnpm "$@"
+		fi
 	}
 fi
