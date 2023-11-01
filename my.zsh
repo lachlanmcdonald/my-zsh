@@ -8,9 +8,6 @@ export EDITOR='code'
 if [[ $- == *i* ]]; then
 	CLICOLOR=1
 
-	# pnpm
-	alias pn="pnpm"
-
 	# Hide/show dot files
 	alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
 	alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
@@ -35,13 +32,28 @@ if [[ $- == *i* ]]; then
 	alias gf="git fetch --progress --tags --prune --prune-tags; git pull --progress"
 	alias wip="git commit -m WIP"
 
+	# pnpm
+	alias pn="pnpm"
+
+	# determine local package manager and run command with it
+	function p() {
+		if [[ -f 'pnpm-lock.yaml' ]]; then
+			command pnpm "$@"
+		elif [[ -f 'yarn.lock' ]]; then
+			command yarn "$@"
+		elif [[ -f 'package-lock.json' ]]; then
+			command npm "$@"
+		else
+			command pnpm "$@"
+		fi
+	}
+
 	# Find files\directories with names that contain the provided string
 	function fz() {
 		find -E . -iregex ".*$1.*"
 	}
 
-	# Delete files that are zero bytes
-	# and prune empty directories
+	# Delete files that are zero bytes and prune empty directories
 	function delzb() {
 		find . -type f -name '*' -size 0 -delete
 		find . -type d -empty -delete
@@ -55,18 +67,5 @@ if [[ $- == *i* ]]; then
 	# Fix audio
 	function fixaudio() {
 		sudo kill -9 `ps ax | grep 'coreaudio[a-z]' | awk '{print $1}'`
-	}
-
-	# determine local package manager and run command with it
-	function p() {
-		if [[ -f 'pnpm-lock.yaml' ]]; then
-			command pnpm "$@"
-		elif [[ -f 'yarn.lock' ]]; then
-			command yarn "$@"
-		elif [[ -f 'package-lock.json' ]]; then
-			command npm "$@"
-		else
-			command pnpm "$@"
-		fi
 	}
 fi
