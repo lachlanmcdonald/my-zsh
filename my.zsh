@@ -9,31 +9,31 @@ if [[ $- == *i* ]]; then
 	CLICOLOR=1
 
 	# Hide/show dot files
-	alias showdots="defaults write com.apple.finder AppleShowAllFiles YES; killall Finder"
-	alias hidedots="defaults write com.apple.finder AppleShowAllFiles NO; killall Finder"
+	alias showdots='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
+	alias hidedots='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
 
 	# Hide\show desktop icons
-	alias deskoff="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-	alias deskon="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+	alias deskoff='defaults write com.apple.finder CreateDesktop -bool false && killall Finder'
+	alias deskon='defaults write com.apple.finder CreateDesktop -bool true && killall Finder'
 
 	# Shortcuts
 	alias s='cd ~/Sites/'
 	alias d='cd ~/Desktop/'
 	alias dw='cd ~/Downloads/'
-	alias drop="cd /Volumes/Drop"
+	alias drop='cd /Volumes/Drop'
 
 	alias mkdir='mkdir -p' # mkdir always creates sub-directories
 	alias ls='ls -lAG' # Pretty ls
 	alias inet="ifconfig | grep -E '\d+\.\d+\.\d+\.\d+'" # Quickly get current IPv4 address
-	alias dict="code ~/Library/Spelling/LocalDictionary" # Edit local spelling dictionary
+	alias dict='code ~/Library/Spelling/LocalDictionary' # Edit local spelling dictionary
 
 	# Git
-	alias gs="git status"
-	alias gf="git fetch --progress --tags --prune --prune-tags; git pull --progress"
-	alias wip="git commit -m WIP"
+	alias gs='git status'
+	alias gf='git fetch --progress --tags --prune --prune-tags; git pull --progress'
+	alias wip='git commit -m WIP'
 
 	# pnpm
-	alias pn="pnpm"
+	alias pn='pnpm'
 
 	# determine local package manager and run command with it
 	function p() {
