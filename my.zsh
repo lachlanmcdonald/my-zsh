@@ -68,4 +68,20 @@ if [[ $- == *i* ]]; then
 	function fixaudio() {
 		sudo kill -9 `ps ax | grep 'coreaudio[a-z]' | awk '{print $1}'`
 	}
+
+	# Reduce PDF
+	function redpdf() {
+		BNAME=$(basename "$1")
+
+		$(brew --prefix gs)/bin/gs \
+			-sDEVICE=pdfwrite \
+			-dCompatibilityLevel=1.4 \
+			-dPDFSETTINGS=/ebook \
+			-dNOPAUSE \
+			-dQUIET \
+			-dBATCH \
+			-sOutputFile="${BNAME%.*} (Reduced).pdf" \
+			"$1"
+
+	}
 fi
